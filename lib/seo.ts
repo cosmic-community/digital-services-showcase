@@ -53,7 +53,7 @@ export function generateMetadata(data: SEOMetadata) {
         index: true,
         follow: true,
         'max-video-preview': -1,
-        'max-image-preview': 'large',
+        'max-image-preview': 'large' as const, // Changed: Fixed type to use literal 'large' instead of string
         'max-snippet': -1,
       },
     },
