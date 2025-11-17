@@ -22,25 +22,25 @@ export default async function HomePage() {
       />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
+      <section className="bg-gradient-to-br from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               Transform Your Digital Presence
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100">
+            <p className="text-xl md:text-2xl mb-8 text-blue-100 dark:text-blue-200">
               Professional digital services to help your business grow
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/services"
-                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 dark:hover:bg-gray-100 transition-colors"
               >
                 Our Services
               </Link>
               <Link
                 href="/case-studies"
-                className="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+                className="bg-blue-700 dark:bg-blue-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
               >
                 View Our Work
               </Link>
@@ -50,11 +50,11 @@ export default async function HomePage() {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Our Services</h2>
-            <p className="text-xl text-gray-600">
+            <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Our Services</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400">
               Comprehensive digital solutions tailored to your needs
             </p>
           </div>
@@ -64,7 +64,7 @@ export default async function HomePage() {
               <Link
                 key={service.id}
                 href={`/services/${service.slug}`}
-                className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
               >
                 {service.metadata.icon && (
                   <img
@@ -75,14 +75,14 @@ export default async function HomePage() {
                     height="80"
                   />
                 )}
-                <h3 className="text-2xl font-bold mb-4">
+                <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
                   {service.metadata.service_name}
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
                   {service.metadata.short_description}
                 </p>
                 {service.metadata.starting_price && (
-                  <p className="text-blue-600 font-semibold">
+                  <p className="text-blue-600 dark:text-blue-400 font-semibold">
                     Starting at {service.metadata.starting_price}
                   </p>
                 )}
@@ -93,7 +93,7 @@ export default async function HomePage() {
           <div className="text-center mt-12">
             <Link
               href="/services"
-              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-block bg-blue-600 dark:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               View All Services
             </Link>
@@ -102,11 +102,11 @@ export default async function HomePage() {
       </section>
 
       {/* Case Studies Section */}
-      <section className="py-20">
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Success Stories</h2>
-            <p className="text-xl text-gray-600">
+            <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Success Stories</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400">
               See how we've helped businesses achieve their goals
             </p>
           </div>
@@ -129,14 +129,14 @@ export default async function HomePage() {
                     />
                   </div>
                 )}
-                <div className="p-6 bg-white">
-                  <h3 className="text-2xl font-bold mb-2">
+                <div className="p-6 bg-white dark:bg-gray-900">
+                  <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
                     {caseStudy.metadata.project_name}
                   </h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
                     {caseStudy.metadata.project_summary}
                   </p>
-                  <p className="text-blue-600 font-semibold">
+                  <p className="text-blue-600 dark:text-blue-400 font-semibold">
                     Read Case Study →
                   </p>
                 </div>
@@ -147,7 +147,7 @@ export default async function HomePage() {
           <div className="text-center mt-12">
             <Link
               href="/case-studies"
-              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-block bg-blue-600 dark:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               View All Case Studies
             </Link>
@@ -156,11 +156,11 @@ export default async function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">What Our Clients Say</h2>
-            <p className="text-xl text-gray-600">
+            <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">What Our Clients Say</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400">
               Don't just take our word for it
             </p>
           </div>
@@ -169,7 +169,7 @@ export default async function HomePage() {
             {testimonials.slice(0, 3).map((testimonial: Testimonial) => (
               <div
                 key={testimonial.id}
-                className="bg-white p-8 rounded-xl shadow-lg"
+                className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg"
               >
                 <div className="flex items-center mb-4">
                   {testimonial.metadata.client_photo && (
@@ -182,8 +182,8 @@ export default async function HomePage() {
                     />
                   )}
                   <div>
-                    <p className="font-bold">{testimonial.metadata.client_name}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-bold text-gray-900 dark:text-white">{testimonial.metadata.client_name}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       {testimonial.metadata.client_role}
                       {testimonial.metadata.client_company && `, ${testimonial.metadata.client_company}`}
                     </p>
@@ -200,7 +200,7 @@ export default async function HomePage() {
                   </div>
                 )}
                 
-                <p className="text-gray-700 italic">
+                <p className="text-gray-700 dark:text-gray-300 italic">
                   "{testimonial.metadata.testimonial_quote}"
                 </p>
               </div>
@@ -210,11 +210,11 @@ export default async function HomePage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-20">
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Meet Our Team</h2>
-            <p className="text-xl text-gray-600">
+            <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Meet Our Team</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400">
               Experts dedicated to your success
             </p>
           </div>
@@ -231,14 +231,14 @@ export default async function HomePage() {
                     height="192"
                   />
                 )}
-                <h3 className="text-2xl font-bold mb-2">
+                <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
                   {member.metadata.full_name}
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
                   {member.metadata.job_title}
                 </p>
                 {member.metadata.bio && (
-                  <p className="text-gray-700 mb-4">
+                  <p className="text-gray-700 dark:text-gray-300 mb-4">
                     {member.metadata.bio}
                   </p>
                 )}
@@ -248,7 +248,7 @@ export default async function HomePage() {
                       href={member.metadata.linkedin_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-700"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                     >
                       LinkedIn
                     </a>
@@ -258,7 +258,7 @@ export default async function HomePage() {
                       href={`https://twitter.com/${member.metadata.twitter_handle.replace('@', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-700"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                     >
                       Twitter
                     </a>
@@ -271,7 +271,7 @@ export default async function HomePage() {
           <div className="text-center mt-12">
             <Link
               href="/team"
-              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-block bg-blue-600 dark:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               View Full Team
             </Link>
@@ -280,17 +280,17 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-600 text-white">
+      <section className="py-20 bg-blue-600 dark:bg-blue-700 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-6">
             Ready to Get Started?
           </h2>
-          <p className="text-xl mb-8 text-blue-100">
+          <p className="text-xl mb-8 text-blue-100 dark:text-blue-200">
             Let's discuss how we can help transform your digital presence
           </p>
           <Link
             href="/services"
-            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 dark:hover:bg-gray-100 transition-colors"
           >
             Explore Our Services
           </Link>
