@@ -82,12 +82,12 @@ export default function CartPage() {
                   className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6"
                 >
                   <div className="flex gap-4">
-                    {product.metadata.images && 
-                     product.metadata.images.length > 0 && 
-                     product.metadata.images[0] && (
+                    {product.metadata.gallery && 
+                     product.metadata.gallery.length > 0 && 
+                     product.metadata.gallery[0] && (
                       <img
-                        src={`${product.metadata.images[0].imgix_url}?w=400&h=400&fit=crop&auto=format,compress`}
-                        alt={product.metadata.product_name}
+                        src={`${product.metadata.gallery[0].imgix_url}?w=400&h=400&fit=crop&auto=format,compress`}
+                        alt={product.metadata.name}
                         className="w-24 h-24 object-cover rounded-lg"
                         width="96"
                         height="96"
@@ -95,7 +95,7 @@ export default function CartPage() {
                     )}
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                        {product.metadata.product_name}
+                        {product.metadata.name}
                       </h3>
                       <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
                         ${product.metadata.price.toFixed(2)} each

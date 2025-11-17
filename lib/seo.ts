@@ -97,8 +97,8 @@ export function generateCaseStudySchema(caseStudy: CaseStudy) {
     description: caseStudy.metadata.project_summary,
     image: caseStudy.metadata.featured_image ? 
       `${caseStudy.metadata.featured_image.imgix_url}?w=1200&h=630&fit=crop&auto=format,compress` : undefined,
-    datePublished: caseStudy.created_at,
-    dateModified: caseStudy.modified_at,
+    datePublished: caseStudy.created_at || new Date().toISOString(),
+    dateModified: caseStudy.modified_at || new Date().toISOString(),
     author: {
       '@type': 'Organization',
       name: 'Digital Services Showcase',

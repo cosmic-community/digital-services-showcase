@@ -2,10 +2,13 @@ export interface Product {
   id: string
   title: string
   slug: string
+  created_at?: string
+  modified_at?: string
   metadata: {
     name: string
     description: string
     price: number
+    currency?: string
     featured_image: {
       url: string
       imgix_url: string
@@ -20,6 +23,7 @@ export interface Product {
       slug: string
     }
     features?: string | string[]
+    specifications?: string
     stock_quantity?: number
     sku?: string
   }
@@ -48,6 +52,8 @@ export interface Service {
   id: string
   title: string
   slug: string
+  created_at?: string
+  modified_at?: string
   metadata: {
     service_name: string
     short_description: string
@@ -65,6 +71,8 @@ export interface CaseStudy {
   id: string
   title: string
   slug: string
+  created_at?: string
+  modified_at?: string
   metadata: {
     project_name: string
     client_name: string

@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return generateSEOMetadata({
-    title: `${product.metadata.product_name} - Shop`,
+    title: `${product.metadata.name} - Shop`,
     description: product.metadata.description,
     canonical: `/shop/${slug}`,
   })
@@ -45,26 +45,26 @@ export default async function ProductPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Product Images */}
             <div className="p-8">
-              {typedProduct.metadata.images && 
-               typedProduct.metadata.images.length > 0 && 
-               typedProduct.metadata.images[0] && (
+              {typedProduct.metadata.gallery && 
+               typedProduct.metadata.gallery.length > 0 && 
+               typedProduct.metadata.gallery[0] && (
                 <div className="space-y-4">
                   <img
-                    src={`${typedProduct.metadata.images[0].imgix_url}?w=1200&h=1200&fit=crop&auto=format,compress`}
-                    alt={typedProduct.metadata.product_name}
+                    src={`${typedProduct.metadata.gallery[0].imgix_url}?w=1200&h=1200&fit=crop&auto=format,compress`}
+                    alt={typedProduct.metadata.name}
                     className="w-full rounded-lg"
                     width="600"
                     height="600"
                   />
-                  {typedProduct.metadata.images.length > 1 && (
+                  {typedProduct.metadata.gallery.length > 1 && (
                     <div className="grid grid-cols-4 gap-2">
-                      {typedProduct.metadata.images.slice(1).map((image, index) => {
+                      {typedProduct.metadata.gallery.slice(1).map((image: { url: string; imgix_url: string }, index: number) => {
                         if (!image) return null
                         return (
                           <img
                             key={index}
                             src={`${image.imgix_url}?w=400&h=400&fit=crop&auto=format,compress`}
-                            alt={`${typedProduct.metadata.product_name} ${index + 2}`}
+                            alt={`${typedProduct.metadata.name} ${index + 2}`}
                             className="w-full rounded-lg cursor-pointer hover:opacity-75 transition-opacity"
                             width="100"
                             height="100"
@@ -80,7 +80,7 @@ export default async function ProductPage({ params }: PageProps) {
             {/* Product Details */}
             <div className="p-8">
               <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-                {typedProduct.metadata.product_name}
+                {typedProduct.metadata.name}
               </h1>
               
               <div className="mb-6">
@@ -104,7 +104,7 @@ export default async function ProductPage({ params }: PageProps) {
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Features:</h3>
                   <ul className="space-y-2">
-                    {typedProduct.metadata.features.map((feature, index) => (
+                    {typedProduct.metadata.features.map((feature: string, index: number) => (
                       <li key={index} className="flex items-start text-gray-700 dark:text-gray-300">
                         <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
