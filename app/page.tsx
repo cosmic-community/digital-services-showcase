@@ -1,7 +1,7 @@
 import { getServices, getTestimonials, getCaseStudies, getTeamMembers } from '@/lib/cosmic'
 import { Service, Testimonial, CaseStudy, TeamMember } from '@/types'
 import Link from 'next/link'
-import { generateOrganizationSchema } from '@/lib/seo'
+import { generateOrganizationSchema, generateLocalBusinessSchema, generateFAQSchema, generateAggregateRatingSchema } from '@/lib/seo'
 
 export default async function HomePage() {
   const [services, testimonials, caseStudies, teamMembers] = await Promise.all([
@@ -12,6 +12,28 @@ export default async function HomePage() {
   ])
 
   const organizationSchema = generateOrganizationSchema()
+  const localBusinessSchema = generateLocalBusinessSchema()
+  const aggregateRatingSchema = generateAggregateRatingSchema(testimonials)
+  
+  // FAQ Schema for common questions
+  const faqSchema = generateFAQSchema([
+    {
+      question: 'What digital services do you offer?',
+      answer: 'We offer comprehensive digital services including web development, mobile app development, and digital marketing solutions. Our team specializes in creating custom solutions tailored to your business needs.',
+    },
+    {
+      question: 'How long does a typical project take?',
+      answer: 'Project timelines vary based on scope and complexity. Web development projects typically take 4-8 weeks, mobile apps 8-16 weeks, and ongoing marketing campaigns are monthly retainers. We provide detailed timelines during consultation.',
+    },
+    {
+      question: 'What is your pricing structure?',
+      answer: 'Our pricing is project-based and customized to your specific needs. Web development starts at $5,000, mobile apps at $10,000, and digital marketing at $2,000/month. Contact us for a detailed quote.',
+    },
+    {
+      question: 'Do you offer support after project completion?',
+      answer: 'Yes, we provide ongoing support and maintenance packages for all projects. We ensure your digital solutions continue to perform optimally and can assist with updates and enhancements.',
+    },
+  ])
 
   return (
     <div>
@@ -20,6 +42,20 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      {aggregateRatingSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(aggregateRatingSchema) }}
+        />
+      )}
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 text-white py-20">
