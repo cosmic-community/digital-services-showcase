@@ -18,7 +18,7 @@ export default async function TestimonialsPage() {
   const testimonials = await getTestimonials()
   
   const aggregateRatingSchema = generateAggregateRatingSchema(testimonials)
-  const reviewSchemas = testimonials.map((t: Testimonial) => generateReviewSchema(t)).filter(Boolean) // Changed: Added explicit type annotation
+  const reviewSchemas = testimonials.map((t: Testimonial) => generateReviewSchema(t)).filter(Boolean)
 
   return (
     <div className="py-20">
@@ -29,7 +29,7 @@ export default async function TestimonialsPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(aggregateRatingSchema) }}
         />
       )}
-      {reviewSchemas.map((schema: any, index: number) => ( // Changed: Added explicit type annotations
+      {reviewSchemas.map((schema: any, index: number) => (
         <script
           key={index}
           type="application/ld+json"
