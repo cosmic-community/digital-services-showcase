@@ -1,62 +1,57 @@
-'use client'
-
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Product, CartItem } from '@/types'
 
-interface CartStore {
+interface CartState {
   items: CartItem[]
-  addItem: (product: Product, quantity?: number) => void
+  addItem: (product: Product, quantity: number) => void
   removeItem: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
   clearCart: () => void
   getTotal: () => number
 }
 
-export const useCart = create<CartStore>()(
+export const useCart = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
       
-      addItem: (product: Product, quantity = 1) => {
+      addItem: (product: Product, quantity: number) => {
         const items = get().items
-        const existingItemIndex = items.findIndex(item => item.product.id === product.id)
+        const existingItem = items.find((item: CartItem) => item.product.id === product.id)
         
-        if (existingItemIndex > -1) {
-          const existingItem = items[existingItemIndex]
-          if (existingItem) {
-            const newItems = [...items]
-            newItems[existingItemIndex] = {
-              ...existingItem,
-              quantity: existingItem.quantity + quantity
-            }
-            set({ items: newItems })
-          }
+        if (existingItem) {
+          set({
+            items: items.map((item: CartItem) =>
+              item.product.id === product.id
+                ? { ...item, quantity: item.quantity + quantity }
+                : item
+            )
+          })
         } else {
-          set({ items: [...items, { product, quantity }] })
+          set({
+            items: [...items, { product, quantity }]
+          })
         }
       },
       
       removeItem: (productId: string) => {
-        set({ items: get().items.filter(item => item.product.id !== productId) })
+        set({
+          items: get().items.filter((item: CartItem) => item.product.id !== productId)
+        })
       },
       
       updateQuantity: (productId: string, quantity: number) => {
         if (quantity <= 0) {
           get().removeItem(productId)
-          return
-        }
-        
-        const items = get().items
-        const itemIndex = items.findIndex(item => item.product.id === productId)
-        
-        if (itemIndex > -1) {
-          const item = items[itemIndex]
-          if (item) {
-            const newItems = [...items]
-            newItems[itemIndex] = { ...item, quantity }
-            set({ items: newItems })
-          }
+        } else {
+          set({
+            items: get().items.map((item: CartItem) =>
+              item.product.id === productId
+                ? { ...item, quantity }
+                : item
+            )
+          })
         }
       },
       
@@ -65,22 +60,13 @@ export const useCart = create<CartStore>()(
       },
       
       getTotal: () => {
-        return get().items.reduce((total, item) => {
+        return get().items.reduce((total: number, item: CartItem) => {
           return total + (item.product.metadata.price * item.quantity)
         }, 0)
       }
     }),
     {
-      name: 'cart-storage',
+      name: 'shopping-cart'
     }
   )
 )
-
-// Export helper functions for non-hook contexts
-export const addToCart = (product: Product, quantity = 1) => {
-  useCart.getState().addItem(product, quantity)
-}
-
-export const clearCart = () => {
-  useCart.getState().clearCart()
-}

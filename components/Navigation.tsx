@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, ShoppingCart } from 'lucide-react'
 import { useCart } from '@/lib/cart'
+import { CartItem } from '@/types'
 
 export default function Navigation() {
   const pathname = usePathname()
@@ -118,6 +119,3 @@ export default function Navigation() {
     </nav>
   )
 }
-
-// Import CartItem type
-import { CartItem } from '@/types'
