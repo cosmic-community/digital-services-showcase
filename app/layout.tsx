@@ -3,17 +3,14 @@ import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CosmicBadge from '@/components/CosmicBadge'
+import { generateMetadata as generateSEOMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Digital Services Showcase',
-  description: 'Professional digital services for modern businesses',
-  icons: {
-    icon: {
-      url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💼</text></svg>",
-      type: 'image/svg+xml',
-    },
-  },
-}
+export const metadata: Metadata = generateSEOMetadata({
+  title: 'Digital Services Showcase - Professional Digital Solutions',
+  description: 'Professional digital services for modern businesses. Web development, mobile apps, and digital marketing solutions.',
+  keywords: ['digital services', 'web development', 'mobile apps', 'digital marketing', 'professional services'],
+  canonical: '/',
+})
 
 export default function RootLayout({
   children,

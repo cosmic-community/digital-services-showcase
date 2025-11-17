@@ -3,12 +3,41 @@ import { getCaseStudy, getCaseStudies } from '@/lib/cosmic'
 import { CaseStudy } from '@/types'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { generateMetadata as generateSEOMetadata, generateCaseStudySchema, generateBreadcrumbSchema } from '@/lib/seo'
+import type { Metadata } from 'next'
 
 export async function generateStaticParams() {
   const caseStudies = await getCaseStudies()
   return caseStudies.map((caseStudy: CaseStudy) => ({
     slug: caseStudy.slug,
   }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const caseStudy = await getCaseStudy(slug) as CaseStudy | null
+
+  if (!caseStudy) {
+    return {
+      title: 'Case Study Not Found',
+    }
+  }
+
+  return generateSEOMetadata({
+    title: `${caseStudy.metadata.project_name} - Case Study`,
+    description: caseStudy.metadata.project_summary,
+    keywords: [
+      caseStudy.metadata.project_name,
+      caseStudy.metadata.client_name,
+      'case study',
+      ...(caseStudy.metadata.technologies_used || []),
+    ],
+    canonical: `/case-studies/${caseStudy.slug}`,
+    ogImage: caseStudy.metadata.featured_image?.imgix_url,
+    ogType: 'article',
+    publishedTime: caseStudy.created_at,
+    modifiedTime: caseStudy.modified_at,
+  })
 }
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -19,8 +48,25 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
     notFound()
   }
 
+  const caseStudySchema = generateCaseStudySchema(caseStudy)
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Case Studies', url: '/case-studies' },
+    { name: caseStudy.metadata.project_name, url: `/case-studies/${caseStudy.slug}` },
+  ])
+
   return (
     <div className="py-20">
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(caseStudySchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           href="/case-studies"
