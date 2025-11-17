@@ -87,6 +87,70 @@ export interface CaseStudy extends CosmicObject {
   };
 }
 
+// Category type
+export interface Category extends CosmicObject {
+  type: 'categories';
+  metadata: {
+    category_name: string;
+    description?: string;
+    image?: {
+      url: string;
+      imgix_url: string;
+    };
+  };
+}
+
+// Product type
+export interface Product extends CosmicObject {
+  type: 'products';
+  metadata: {
+    product_name: string;
+    description: string;
+    price: number;
+    currency: string;
+    images?: Array<{
+      url: string;
+      imgix_url: string;
+    }>;
+    category?: Category;
+    stock_quantity?: number;
+    sku?: string;
+    features?: string[];
+    specifications?: string;
+  };
+}
+
+// Order type
+export interface Order extends CosmicObject {
+  type: 'orders';
+  metadata: {
+    order_number: string;
+    customer_email: string;
+    customer_name: string;
+    items: Array<{
+      product_id: string;
+      product_name: string;
+      quantity: number;
+      price: number;
+    }>;
+    total_amount: number;
+    currency: string;
+    status: {
+      key: string;
+      value: string;
+    };
+    stripe_payment_intent_id?: string;
+    shipping_address?: string;
+    created_date: string;
+  };
+}
+
+// Cart Item type (client-side only)
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
 // API response types
 export interface CosmicResponse<T> {
   objects: T[];
