@@ -77,7 +77,7 @@ export default async function ShopPage() {
                   href={`/shop/${product.slug}`}
                   className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden group"
                 >
-                  {product.metadata.images && product.metadata.images.length > 0 && (
+                  {product.metadata.images && product.metadata.images.length > 0 && product.metadata.images[0] && ( 
                     <div className="relative h-48 overflow-hidden">
                       <img
                         src={`${product.metadata.images[0].imgix_url}?w=600&h=384&fit=crop&auto=format,compress`}

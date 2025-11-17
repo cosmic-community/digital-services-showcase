@@ -45,7 +45,7 @@ export default async function ProductPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Product Images */}
             <div className="p-8">
-              {typedProduct.metadata.images && typedProduct.metadata.images.length > 0 && (
+              {typedProduct.metadata.images && typedProduct.metadata.images.length > 0 && typedProduct.metadata.images[0] && ( 
                 <div className="space-y-4">
                   <img
                     src={`${typedProduct.metadata.images[0].imgix_url}?w=1200&h=1200&fit=crop&auto=format,compress`}

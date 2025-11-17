@@ -70,7 +70,7 @@ export default function CartPage() {
             {cart.map((item) => (
               <div key={item.product.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <div className="flex items-center gap-6">
-                  {item.product.metadata.images && item.product.metadata.images.length > 0 && (
+                  {item.product.metadata.images && item.product.metadata.images.length > 0 && item.product.metadata.images[0] && ( 
                     <img
                       src={`${item.product.metadata.images[0].imgix_url}?w=200&h=200&fit=crop&auto=format,compress`}
                       alt={item.product.metadata.product_name}
