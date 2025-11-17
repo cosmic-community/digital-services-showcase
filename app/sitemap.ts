@@ -44,10 +44,17 @@ export default async function sitemap() {
     },
   ]
 
+  // Helper function to safely create Date from timestamp
+  const safeDate = (timestamp: string | undefined): Date => {
+    if (!timestamp) return new Date()
+    const date = new Date(timestamp)
+    return isNaN(date.getTime()) ? new Date() : date
+  }
+
   // Service pages
   const servicePages = services.map((service: Service) => ({
     url: `${baseUrl}/services/${service.slug}`,
-    lastModified: new Date(service.modified_at),
+    lastModified: safeDate(service.modified_at),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
@@ -55,7 +62,7 @@ export default async function sitemap() {
   // Case study pages
   const caseStudyPages = caseStudies.map((caseStudy: CaseStudy) => ({
     url: `${baseUrl}/case-studies/${caseStudy.slug}`,
-    lastModified: new Date(caseStudy.modified_at),
+    lastModified: safeDate(caseStudy.modified_at),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
