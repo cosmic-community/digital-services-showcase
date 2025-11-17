@@ -5,7 +5,7 @@ import Footer from '@/components/Footer'
 import CosmicBadge from '@/components/CosmicBadge'
 import { generateMetadata as generateSEOMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = generateMetadata({
+export const metadata: Metadata = generateSEOMetadata({
   title: 'Digital Services Showcase - Professional Digital Solutions',
   description: 'Professional digital services for modern businesses. Web development, mobile apps, and digital marketing solutions.',
   keywords: ['digital services', 'web development', 'mobile apps', 'digital marketing', 'professional services'],
