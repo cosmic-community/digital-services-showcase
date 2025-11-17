@@ -2,80 +2,79 @@
 
 import { Product, CartItem } from '@/types'
 
-const CART_STORAGE_KEY = 'ecommerce_cart'
+const CART_KEY = 'cosmic-cart'
 
 export function getCart(): CartItem[] {
   if (typeof window === 'undefined') return []
   
-  try {
-    const cart = localStorage.getItem(CART_STORAGE_KEY)
-    return cart ? JSON.parse(cart) : []
-  } catch (error) {
-    console.error('Failed to get cart:', error)
-    return []
-  }
+  const cart = localStorage.getItem(CART_KEY)
+  return cart ? JSON.parse(cart) : []
 }
 
-export function addToCart(product: Product, quantity: number = 1): CartItem[] {
+export function addToCart(product: Product, quantity: number = 1): void {
   const cart = getCart()
-  const existingItemIndex = cart.findIndex(item => item.product.id === product.id)
-  
-  if (existingItemIndex > -1) {
-    // Changed: Access and update within the same null check block
-    const existingItem = cart[existingItemIndex]
-    if (existingItem) {
-      existingItem.quantity += quantity
-    }
+  const existingItem = cart.find(item => item.product.id === product.id)
+
+  if (existingItem) {
+    existingItem.quantity += quantity
   } else {
     cart.push({ product, quantity })
   }
+
+  localStorage.setItem(CART_KEY, JSON.stringify(cart))
   
-  saveCart(cart)
-  return cart
+  // Dispatch custom event to notify other components
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('cartUpdated'))
+  }
 }
 
-export function removeFromCart(productId: string): CartItem[] {
+export function removeFromCart(productId: string): void {
   const cart = getCart()
   const updatedCart = cart.filter(item => item.product.id !== productId)
-  saveCart(updatedCart)
-  return updatedCart
+  
+  localStorage.setItem(CART_KEY, JSON.stringify(updatedCart))
+  
+  // Dispatch custom event to notify other components
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('cartUpdated'))
+  }
 }
 
-export function updateCartItemQuantity(productId: string, quantity: number): CartItem[] {
+export function updateCartItemQuantity(productId: string, quantity: number): void {
   const cart = getCart()
-  const itemIndex = cart.findIndex(item => item.product.id === productId)
-  
-  if (itemIndex > -1) {
+  const item = cart.find(item => item.product.id === productId)
+
+  if (item) {
     if (quantity <= 0) {
-      return removeFromCart(productId)
-    }
-    // Changed: Access and update within the same null check block
-    const item = cart[itemIndex]
-    if (item) {
+      removeFromCart(productId)
+    } else {
       item.quantity = quantity
-      saveCart(cart)
+      localStorage.setItem(CART_KEY, JSON.stringify(cart))
+      
+      // Dispatch custom event to notify other components
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('cartUpdated'))
+      }
     }
   }
-  
-  return cart
 }
 
 export function clearCart(): void {
-  if (typeof window === 'undefined') return
-  localStorage.removeItem(CART_STORAGE_KEY)
+  localStorage.removeItem(CART_KEY)
+  
+  // Dispatch custom event to notify other components
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('cartUpdated'))
+  }
 }
 
-export function getCartTotal(cart: CartItem[]): number {
-  return cart.reduce((total, item) => {
-    return total + (item.product.metadata.price * item.quantity)
-  }, 0)
+export function getCartTotal(): number {
+  const cart = getCart()
+  return cart.reduce((total, item) => total + (item.product.metadata.price * item.quantity), 0)
 }
 
-export function getCartItemCount(cart: CartItem[]): number {
+export function getCartItemCount(): number {
+  const cart = getCart()
   return cart.reduce((count, item) => count + item.quantity, 0)
-}
-
-function saveCart(cart: CartItem[]): void {
-  if (typeof window === 'undefined') return
-  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart))
 }

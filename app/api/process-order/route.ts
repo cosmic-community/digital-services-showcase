@@ -2,51 +2,43 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createOrder } from '@/lib/cosmic'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2024-11-20.acacia' as any, // Changed: Cast to any to resolve type mismatch with Stripe SDK
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2023-10-16',
 })
 
 export async function POST(request: NextRequest) {
   try {
     const { sessionId } = await request.json()
 
-    if (!sessionId) {
-      return NextResponse.json(
-        { error: 'Session ID is required' },
-        { status: 400 }
-      )
-    }
-
     const session = await stripe.checkout.sessions.retrieve(sessionId)
 
-    if (!session) {
+    if (session.payment_status !== 'paid') {
       return NextResponse.json(
-        { error: 'Invalid session' },
+        { error: 'Payment not completed' },
         { status: 400 }
       )
     }
 
-    const orderNumber = `ORD-${Date.now()}`
-    const cart = JSON.parse(session.metadata?.cart || '[]')
+    const items = JSON.parse(session.metadata?.items || '[]')
+    const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 
-    await createOrder({
+    const order = await createOrder({
       order_number: orderNumber,
-      customer_email: session.customer_email || '',
-      customer_name: session.metadata?.customer_name || '',
-      items: cart,
-      total_amount: (session.amount_total || 0) / 100,
+      customer_email: session.customer_details?.email || '',
+      customer_name: session.customer_details?.name || '',
+      items: items,
+      total_amount: session.amount_total ? session.amount_total / 100 : 0,
       currency: session.currency || 'usd',
       status: 'Paid',
       stripe_payment_intent_id: session.payment_intent as string,
-      shipping_address: session.metadata?.shipping_address || '',
+      shipping_address: session.customer_details?.address 
+        ? JSON.stringify(session.customer_details.address)
+        : '',
     })
 
-    return NextResponse.json({ 
-      success: true,
-      orderNumber 
-    })
+    return NextResponse.json({ order })
   } catch (error) {
-    console.error('Process order error:', error)
+    console.error('Order processing error:', error)
     return NextResponse.json(
       { error: 'Failed to process order' },
       { status: 500 }
