@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { addToCart } from '@/lib/cart'
+import { useCart } from '@/lib/cart'
 import { Product } from '@/types'
 
 interface AddToCartButtonProps {
@@ -11,9 +11,10 @@ interface AddToCartButtonProps {
 export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const [quantity, setQuantity] = useState(1)
   const [isAdded, setIsAdded] = useState(false)
+  const { addItem } = useCart()
 
   const handleAddToCart = () => {
-    addToCart(product, quantity)
+    addItem(product, quantity)
     setIsAdded(true)
     window.dispatchEvent(new Event('cartUpdated'))
     

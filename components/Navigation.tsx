@@ -21,7 +21,7 @@ export default function Navigation() {
     { name: 'Contact', href: '/contact' },
   ]
 
-  const cartItemCount = items.reduce((total, item) => total + item.quantity, 0)
+  const cartItemCount = items.reduce((total: number, item: CartItem) => total + item.quantity, 0)
 
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-lg sticky top-0 z-50">
@@ -118,3 +118,6 @@ export default function Navigation() {
     </nav>
   )
 }
+
+// Import CartItem type
+import { CartItem } from '@/types'

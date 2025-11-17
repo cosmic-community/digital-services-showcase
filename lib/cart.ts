@@ -75,3 +75,12 @@ export const useCart = create<CartStore>()(
     }
   )
 )
+
+// Export helper functions for non-hook contexts
+export const addToCart = (product: Product, quantity = 1) => {
+  useCart.getState().addItem(product, quantity)
+}
+
+export const clearCart = () => {
+  useCart.getState().clearCart()
+}

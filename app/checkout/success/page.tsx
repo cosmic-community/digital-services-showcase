@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { clearCart } from '@/lib/cart'
+import { useCart } from '@/lib/cart'
 import Link from 'next/link'
 
 function SuccessContent() {
@@ -10,6 +10,7 @@ function SuccessContent() {
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(true)
   const [orderNumber, setOrderNumber] = useState('')
+  const { clearCart } = useCart()
 
   useEffect(() => {
     const sessionId = searchParams.get('session_id')
@@ -44,7 +45,7 @@ function SuccessContent() {
     }
 
     processOrder()
-  }, [searchParams, router])
+  }, [searchParams, router, clearCart])
 
   if (isProcessing) {
     return (
