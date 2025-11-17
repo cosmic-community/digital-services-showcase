@@ -45,7 +45,9 @@ export default async function ProductPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Product Images */}
             <div className="p-8">
-              {typedProduct.metadata.images && typedProduct.metadata.images.length > 0 && typedProduct.metadata.images[0] && ( 
+              {typedProduct.metadata.images && 
+               typedProduct.metadata.images.length > 0 && 
+               typedProduct.metadata.images[0] && (
                 <div className="space-y-4">
                   <img
                     src={`${typedProduct.metadata.images[0].imgix_url}?w=1200&h=1200&fit=crop&auto=format,compress`}
@@ -56,16 +58,19 @@ export default async function ProductPage({ params }: PageProps) {
                   />
                   {typedProduct.metadata.images.length > 1 && (
                     <div className="grid grid-cols-4 gap-2">
-                      {typedProduct.metadata.images.slice(1).map((image, index) => (
-                        <img
-                          key={index}
-                          src={`${image.imgix_url}?w=400&h=400&fit=crop&auto=format,compress`}
-                          alt={`${typedProduct.metadata.product_name} ${index + 2}`}
-                          className="w-full rounded-lg cursor-pointer hover:opacity-75 transition-opacity"
-                          width="100"
-                          height="100"
-                        />
-                      ))}
+                      {typedProduct.metadata.images.slice(1).map((image, index) => {
+                        if (!image) return null
+                        return (
+                          <img
+                            key={index}
+                            src={`${image.imgix_url}?w=400&h=400&fit=crop&auto=format,compress`}
+                            alt={`${typedProduct.metadata.product_name} ${index + 2}`}
+                            className="w-full rounded-lg cursor-pointer hover:opacity-75 transition-opacity"
+                            width="100"
+                            height="100"
+                          />
+                        )
+                      })}
                     </div>
                   )}
                 </div>
@@ -93,7 +98,9 @@ export default async function ProductPage({ params }: PageProps) {
                 {typedProduct.metadata.description}
               </p>
 
-              {typedProduct.metadata.features && typedProduct.metadata.features.length > 0 && (
+              {typedProduct.metadata.features && 
+               Array.isArray(typedProduct.metadata.features) && 
+               typedProduct.metadata.features.length > 0 && (
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Features:</h3>
                   <ul className="space-y-2">

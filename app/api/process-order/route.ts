@@ -12,35 +12,37 @@ export async function POST(request: NextRequest) {
 
     const session = await stripe.checkout.sessions.retrieve(sessionId)
 
-    if (session.payment_status !== 'paid') {
-      return NextResponse.json(
-        { error: 'Payment not completed' },
-        { status: 400 }
-      )
+    if (session.payment_status === 'paid') {
+      const items = JSON.parse(session.metadata?.items || '[]')
+      
+      const orderData = {
+        order_number: `ORD-${Date.now()}`,
+        customer_email: session.customer_details?.email || 'unknown@example.com',
+        customer_name: session.customer_details?.name || 'Unknown Customer',
+        items,
+        total_amount: session.amount_total ? session.amount_total / 100 : 0,
+        currency: session.currency || 'usd',
+        status: 'Completed',
+        stripe_payment_intent_id: session.payment_intent as string,
+      }
+
+      const order = await createOrder(orderData)
+
+      return NextResponse.json({ 
+        success: true, 
+        order,
+        message: 'Order created successfully' 
+      })
     }
 
-    const items = JSON.parse(session.metadata?.items || '[]')
-    const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-
-    const order = await createOrder({
-      order_number: orderNumber,
-      customer_email: session.customer_details?.email || '',
-      customer_name: session.customer_details?.name || '',
-      items: items,
-      total_amount: session.amount_total ? session.amount_total / 100 : 0,
-      currency: session.currency || 'usd',
-      status: 'Paid',
-      stripe_payment_intent_id: session.payment_intent as string,
-      shipping_address: session.customer_details?.address 
-        ? JSON.stringify(session.customer_details.address)
-        : '',
-    })
-
-    return NextResponse.json({ order })
+    return NextResponse.json(
+      { error: 'Payment not completed' },
+      { status: 400 }
+    )
   } catch (error) {
     console.error('Order processing error:', error)
     return NextResponse.json(
-      { error: 'Failed to process order' },
+      { error: 'Error processing order' },
       { status: 500 }
     )
   }

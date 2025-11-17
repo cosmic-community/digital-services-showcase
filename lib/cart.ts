@@ -1,80 +1,77 @@
 'use client'
 
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import { Product, CartItem } from '@/types'
 
-const CART_KEY = 'cosmic-cart'
-
-export function getCart(): CartItem[] {
-  if (typeof window === 'undefined') return []
-  
-  const cart = localStorage.getItem(CART_KEY)
-  return cart ? JSON.parse(cart) : []
+interface CartStore {
+  items: CartItem[]
+  addItem: (product: Product, quantity?: number) => void
+  removeItem: (productId: string) => void
+  updateQuantity: (productId: string, quantity: number) => void
+  clearCart: () => void
+  getTotal: () => number
 }
 
-export function addToCart(product: Product, quantity: number = 1): void {
-  const cart = getCart()
-  const existingItem = cart.find(item => item.product.id === product.id)
-
-  if (existingItem) {
-    existingItem.quantity += quantity
-  } else {
-    cart.push({ product, quantity })
-  }
-
-  localStorage.setItem(CART_KEY, JSON.stringify(cart))
-  
-  // Dispatch custom event to notify other components
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new Event('cartUpdated'))
-  }
-}
-
-export function removeFromCart(productId: string): void {
-  const cart = getCart()
-  const updatedCart = cart.filter(item => item.product.id !== productId)
-  
-  localStorage.setItem(CART_KEY, JSON.stringify(updatedCart))
-  
-  // Dispatch custom event to notify other components
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new Event('cartUpdated'))
-  }
-}
-
-export function updateCartItemQuantity(productId: string, quantity: number): void {
-  const cart = getCart()
-  const item = cart.find(item => item.product.id === productId)
-
-  if (item) {
-    if (quantity <= 0) {
-      removeFromCart(productId)
-    } else {
-      item.quantity = quantity
-      localStorage.setItem(CART_KEY, JSON.stringify(cart))
+export const useCart = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
       
-      // Dispatch custom event to notify other components
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new Event('cartUpdated'))
+      addItem: (product: Product, quantity = 1) => {
+        const items = get().items
+        const existingItemIndex = items.findIndex(item => item.product.id === product.id)
+        
+        if (existingItemIndex > -1) {
+          const existingItem = items[existingItemIndex]
+          if (existingItem) {
+            const newItems = [...items]
+            newItems[existingItemIndex] = {
+              ...existingItem,
+              quantity: existingItem.quantity + quantity
+            }
+            set({ items: newItems })
+          }
+        } else {
+          set({ items: [...items, { product, quantity }] })
+        }
+      },
+      
+      removeItem: (productId: string) => {
+        set({ items: get().items.filter(item => item.product.id !== productId) })
+      },
+      
+      updateQuantity: (productId: string, quantity: number) => {
+        if (quantity <= 0) {
+          get().removeItem(productId)
+          return
+        }
+        
+        const items = get().items
+        const itemIndex = items.findIndex(item => item.product.id === productId)
+        
+        if (itemIndex > -1) {
+          const item = items[itemIndex]
+          if (item) {
+            const newItems = [...items]
+            newItems[itemIndex] = { ...item, quantity }
+            set({ items: newItems })
+          }
+        }
+      },
+      
+      clearCart: () => {
+        set({ items: [] })
+      },
+      
+      getTotal: () => {
+        return get().items.reduce((total, item) => {
+          return total + (item.product.metadata.price * item.quantity)
+        }, 0)
       }
+    }),
+    {
+      name: 'cart-storage',
     }
-  }
-}
-
-export function clearCart(): void {
-  localStorage.removeItem(CART_KEY)
-  
-  // Dispatch custom event to notify other components
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new Event('cartUpdated'))
-  }
-}
-
-export function getCartTotal(): number {
-  const cart = getCart()
-  return cart.reduce((total, item) => total + (item.product.metadata.price * item.quantity), 0)
-}
-
-export function getCartItemCount(): number {
-  const cart = getCart()
-  return cart.reduce((count, item) => count + item.quantity, 0)
-}
+  )
+)

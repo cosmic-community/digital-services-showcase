@@ -14,9 +14,8 @@ export async function POST(request: NextRequest) {
         currency: 'usd',
         product_data: {
           name: item.product.metadata.product_name,
-          description: item.product.metadata.description,
           images: item.product.metadata.images?.[0]?.imgix_url 
-            ? [`${item.product.metadata.images[0].imgix_url}?w=500&h=500&fit=crop&auto=format,compress`]
+            ? [`${item.product.metadata.images[0].imgix_url}?w=800&h=800&fit=crop&auto=format,compress`]
             : [],
         },
         unit_amount: Math.round(item.product.metadata.price * 100),
@@ -28,8 +27,8 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${request.headers.get('origin')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${request.headers.get('origin')}/cart`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/cart`,
       metadata: {
         items: JSON.stringify(items.map((item: any) => ({
           product_id: item.product.id,
@@ -44,7 +43,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Stripe checkout error:', error)
     return NextResponse.json(
-      { error: 'Failed to create checkout session' },
+      { error: 'Error creating checkout session' },
       { status: 500 }
     )
   }
