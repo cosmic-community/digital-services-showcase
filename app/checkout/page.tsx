@@ -69,7 +69,7 @@ export default function CheckoutPage() {
     }
   }
 
-  const total = getCartTotal(cart)
+  const total = getCartTotal() // Changed: Removed cart argument
 
   if (cart.length === 0) {
     return null

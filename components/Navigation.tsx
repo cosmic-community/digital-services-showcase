@@ -22,8 +22,7 @@ export default function Navigation() {
   }, [])
 
   const updateCartCount = () => {
-    const cart = getCart()
-    setCartCount(getCartItemCount(cart))
+    setCartCount(getCartItemCount()) // Changed: Removed cart argument, function gets cart internally
   }
 
   return (
