@@ -21,9 +21,10 @@ export function addToCart(product: Product, quantity: number = 1): CartItem[] {
   const existingItemIndex = cart.findIndex(item => item.product.id === product.id)
   
   if (existingItemIndex > -1) {
-    const existingItem = cart[existingItemIndex] // Changed: Store item in variable for null check
-    if (existingItem) { // Changed: Add null check before accessing
-      cart[existingItemIndex].quantity += quantity
+    // Changed: Access and update within the same null check block
+    const existingItem = cart[existingItemIndex]
+    if (existingItem) {
+      existingItem.quantity += quantity
     }
   } else {
     cart.push({ product, quantity })
@@ -48,9 +49,10 @@ export function updateCartItemQuantity(productId: string, quantity: number): Car
     if (quantity <= 0) {
       return removeFromCart(productId)
     }
-    const item = cart[itemIndex] // Changed: Store item in variable for null check
-    if (item) { // Changed: Add null check before accessing
-      cart[itemIndex].quantity = quantity
+    // Changed: Access and update within the same null check block
+    const item = cart[itemIndex]
+    if (item) {
+      item.quantity = quantity
       saveCart(cart)
     }
   }
