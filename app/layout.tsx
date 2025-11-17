@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CosmicBadge from '@/components/CosmicBadge'
+import { ThemeProvider } from '@/lib/theme-context'
 import { generateMetadata as generateSEOMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = generateSEOMetadata({
@@ -25,12 +26,14 @@ export default function RootLayout({
         <script src="/dashboard-console-capture.js" />
       </head>
       <body>
-        <Navigation />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
-        <CosmicBadge bucketSlug={bucketSlug} />
+        <ThemeProvider>
+          <Navigation />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+          <CosmicBadge bucketSlug={bucketSlug} />
+        </ThemeProvider>
       </body>
     </html>
   )

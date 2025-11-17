@@ -7,11 +7,11 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-40">
+    <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-40 border-b border-gray-200 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-blue-600">
+            <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               Digital Services
             </Link>
           </div>
@@ -20,37 +20,37 @@ export default function Navigation() {
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
             >
               Home
             </Link>
             <Link
               href="/services"
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
             >
               Services
             </Link>
             <Link
               href="/case-studies"
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
             >
               Case Studies
             </Link>
             <Link
               href="/team"
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
             >
               Team
             </Link>
             <Link
               href="/testimonials"
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
             >
               Testimonials
             </Link>
             <Link
               href="/contact"
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
             >
               Contact
             </Link>
@@ -60,7 +60,7 @@ export default function Navigation() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-blue-600"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
               aria-label="Toggle menu"
             >
               <svg
@@ -88,42 +88,42 @@ export default function Navigation() {
             <div className="flex flex-col space-y-3">
               <Link
                 href="/"
-                className="text-gray-700 hover:text-blue-600 font-medium"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Home
               </Link>
               <Link
                 href="/services"
-                className="text-gray-700 hover:text-blue-600 font-medium"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Services
               </Link>
               <Link
                 href="/case-studies"
-                className="text-gray-700 hover:text-blue-600 font-medium"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Case Studies
               </Link>
               <Link
                 href="/team"
-                className="text-gray-700 hover:text-blue-600 font-medium"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Team
               </Link>
               <Link
                 href="/testimonials"
-                className="text-gray-700 hover:text-blue-600 font-medium"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Testimonials
               </Link>
               <Link
                 href="/contact"
-                className="text-gray-700 hover:text-blue-600 font-medium"
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Contact
