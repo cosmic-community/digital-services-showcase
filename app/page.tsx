@@ -1,6 +1,7 @@
 import { getServices, getTestimonials, getCaseStudies, getTeamMembers } from '@/lib/cosmic'
 import { Service, Testimonial, CaseStudy, TeamMember } from '@/types'
 import Link from 'next/link'
+import { generateOrganizationSchema } from '@/lib/seo'
 
 export default async function HomePage() {
   const [services, testimonials, caseStudies, teamMembers] = await Promise.all([
@@ -10,8 +11,16 @@ export default async function HomePage() {
     getTeamMembers()
   ])
 
+  const organizationSchema = generateOrganizationSchema()
+
   return (
     <div>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

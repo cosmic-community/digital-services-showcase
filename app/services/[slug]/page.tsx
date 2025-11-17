@@ -3,12 +3,34 @@ import { getService, getServices } from '@/lib/cosmic'
 import { Service } from '@/types'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { generateMetadata as generateSEOMetadata, generateServiceSchema, generateBreadcrumbSchema } from '@/lib/seo'
+import type { Metadata } from 'next'
 
 export async function generateStaticParams() {
   const services = await getServices()
   return services.map((service: Service) => ({
     slug: service.slug,
   }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const service = await getService(slug) as Service | null
+
+  if (!service) {
+    return {
+      title: 'Service Not Found',
+    }
+  }
+
+  return generateSEOMetadata({
+    title: `${service.metadata.service_name} - Digital Services Showcase`,
+    description: service.metadata.short_description,
+    keywords: [service.metadata.service_name, 'digital services', ...(service.metadata.features || [])],
+    canonical: `/services/${service.slug}`,
+    ogImage: service.metadata.icon?.imgix_url,
+    ogType: 'article',
+  })
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -19,8 +41,25 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     notFound()
   }
 
+  const serviceSchema = generateServiceSchema(service)
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: service.metadata.service_name, url: `/services/${service.slug}` },
+  ])
+
   return (
     <div className="py-20">
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           href="/services"
