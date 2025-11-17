@@ -1,4 +1,4 @@
-import { Service, CaseStudy } from '@/types'
+import { Service, CaseStudy, Testimonial } from '@/types'
 
 export interface SEOMetadata {
   title: string
@@ -40,9 +40,22 @@ export function generateMetadata(data: SEOMetadata) {
       title: data.title,
       description: data.description,
       images: data.ogImage ? [`${data.ogImage}?w=1200&h=630&fit=crop&auto=format,compress`] : [],
+      creator: '@digitalservices',
+      site: '@digitalservices',
     },
     alternates: {
       canonical: data.canonical ? `${baseUrl}${data.canonical}` : baseUrl,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   }
 }
@@ -66,6 +79,11 @@ export function generateServiceSchema(service: Service) {
       priceCurrency: 'USD',
     } : undefined,
     url: `${baseUrl}/services/${service.slug}`,
+    serviceType: service.metadata.service_name,
+    areaServed: {
+      '@type': 'Country',
+      name: 'United States',
+    },
   }
 }
 
@@ -89,6 +107,10 @@ export function generateCaseStudySchema(caseStudy: CaseStudy) {
       '@type': 'Organization',
       name: 'Digital Services Showcase',
       url: baseUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${baseUrl}/logo.png`,
+      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
@@ -105,7 +127,8 @@ export function generateOrganizationSchema() {
     '@type': 'Organization',
     name: 'Digital Services Showcase',
     url: baseUrl,
-    description: 'Professional digital services for modern businesses',
+    description: 'Professional digital services for modern businesses - Web development, mobile apps, and digital marketing solutions',
+    logo: `${baseUrl}/logo.png`,
     address: {
       '@type': 'PostalAddress',
       addressCountry: 'US',
@@ -114,7 +137,13 @@ export function generateOrganizationSchema() {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
       availableLanguage: 'English',
+      email: 'tony@cosmicjs.com',
     },
+    sameAs: [
+      'https://twitter.com/digitalservices',
+      'https://linkedin.com/company/digitalservices',
+      'https://github.com/digitalservices',
+    ],
   }
 }
 
@@ -130,5 +159,127 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
       name: item.name,
       item: `${baseUrl}${item.url}`,
     })),
+  }
+}
+
+export function generateLocalBusinessSchema() {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://digital-services-showcase.vercel.app'
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: 'Digital Services Showcase',
+    image: `${baseUrl}/logo.png`,
+    '@id': baseUrl,
+    url: baseUrl,
+    telephone: '+1-555-123-4567',
+    priceRange: '$$',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '123 Digital Ave',
+      addressLocality: 'San Francisco',
+      addressRegion: 'CA',
+      postalCode: '94102',
+      addressCountry: 'US',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 37.7749,
+      longitude: -122.4194,
+    },
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '18:00',
+    },
+    sameAs: [
+      'https://twitter.com/digitalservices',
+      'https://linkedin.com/company/digitalservices',
+    ],
+  }
+}
+
+export function generateFAQSchema(faqs: Array<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
+}
+
+export function generateAggregateRatingSchema(testimonials: Testimonial[]) {
+  const ratings = testimonials
+    .filter(t => t.metadata.rating?.key)
+    .map(t => parseInt(t.metadata.rating!.key))
+  
+  if (ratings.length === 0) return null
+  
+  const averageRating = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://digital-services-showcase.vercel.app'
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Digital Services Showcase',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: averageRating.toFixed(1),
+      reviewCount: testimonials.length,
+      bestRating: '5',
+      worstRating: '1',
+    },
+    url: baseUrl,
+  }
+}
+
+export function generateReviewSchema(testimonial: Testimonial) {
+  if (!testimonial.metadata.rating?.key) return null
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: testimonial.metadata.rating.key,
+      bestRating: '5',
+      worstRating: '1',
+    },
+    author: {
+      '@type': 'Person',
+      name: testimonial.metadata.client_name,
+    },
+    reviewBody: testimonial.metadata.testimonial_quote,
+    itemReviewed: {
+      '@type': 'Organization',
+      name: 'Digital Services Showcase',
+    },
+  }
+}
+
+export function generateVideoSchema(video: {
+  name: string
+  description: string
+  thumbnailUrl: string
+  uploadDate: string
+  duration?: string
+  contentUrl?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: video.name,
+    description: video.description,
+    thumbnailUrl: video.thumbnailUrl,
+    uploadDate: video.uploadDate,
+    duration: video.duration,
+    contentUrl: video.contentUrl,
   }
 }

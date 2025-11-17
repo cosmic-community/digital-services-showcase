@@ -1,12 +1,42 @@
 import { getTestimonials } from '@/lib/cosmic'
 import { Testimonial } from '@/types'
 import Link from 'next/link'
+import { generateAggregateRatingSchema, generateReviewSchema } from '@/lib/seo'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Client Testimonials - Digital Services Showcase',
+  description: 'Read what our clients say about working with us. Real reviews from satisfied customers who achieved remarkable results with our digital services.',
+  keywords: ['testimonials', 'client reviews', 'customer feedback', 'success stories', 'client satisfaction'],
+  openGraph: {
+    title: 'Client Testimonials - Digital Services Showcase',
+    description: 'Read what our clients say about working with us',
+  },
+}
 
 export default async function TestimonialsPage() {
   const testimonials = await getTestimonials()
+  
+  const aggregateRatingSchema = generateAggregateRatingSchema(testimonials)
+  const reviewSchemas = testimonials.map(t => generateReviewSchema(t)).filter(Boolean)
 
   return (
     <div className="py-20">
+      {/* JSON-LD Structured Data */}
+      {aggregateRatingSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(aggregateRatingSchema) }}
+        />
+      )}
+      {reviewSchemas.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Client Testimonials</h1>
