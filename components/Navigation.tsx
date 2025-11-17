@@ -48,6 +48,12 @@ export default function Navigation() {
             >
               Testimonials
             </Link>
+            <Link
+              href="/contact"
+              className="text-gray-700 hover:text-blue-600 font-medium"
+            >
+              Contact
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -114,6 +120,13 @@ export default function Navigation() {
                 onClick={() => setIsOpen(false)}
               >
                 Testimonials
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+                onClick={() => setIsOpen(false)}
+              >
+                Contact
               </Link>
             </div>
           </div>
